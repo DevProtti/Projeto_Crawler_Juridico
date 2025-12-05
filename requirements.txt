@@ -1,0 +1,10 @@
+langgraph
+langchain-tavily
+langchain-ollama
+langchain-openai
+langchain-core
+scikit-learn
+numpy
+pandas
+ipykernel
+matplotlib
