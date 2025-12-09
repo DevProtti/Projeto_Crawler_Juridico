@@ -1,0 +1,58 @@
+[
+    {
+        "index": 0,
+        "error": true,
+        "tags": [
+            "error"
+        ],
+        "content": "litellm.AuthenticationError: AuthenticationError: OpenAIException - The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable"
+    },
+    {
+        "index": 1,
+        "error": true,
+        "tags": [
+            "error"
+        ],
+        "content": "litellm.AuthenticationError: AuthenticationError: OpenAIException - The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable"
+    },
+    {
+        "index": 2,
+        "error": true,
+        "tags": [
+            "error"
+        ],
+        "content": "litellm.AuthenticationError: AuthenticationError: OpenAIException - The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable"
+    },
+    {
+        "index": 3,
+        "error": true,
+        "tags": [
+            "error"
+        ],
+        "content": "litellm.AuthenticationError: AuthenticationError: OpenAIException - The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable"
+    },
+    {
+        "index": 4,
+        "error": true,
+        "tags": [
+            "error"
+        ],
+        "content": "litellm.AuthenticationError: AuthenticationError: OpenAIException - The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable"
+    },
+    {
+        "index": 5,
+        "error": true,
+        "tags": [
+            "error"
+        ],
+        "content": "litellm.AuthenticationError: AuthenticationError: OpenAIException - The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable"
+    },
+    {
+        "index": 6,
+        "error": true,
+        "tags": [
+            "error"
+        ],
+        "content": "litellm.AuthenticationError: AuthenticationError: OpenAIException - The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable"
+    }
+]

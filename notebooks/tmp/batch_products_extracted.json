@@ -1,0 +1,46 @@
+[
+  {
+    "product_name": "Solução de Jurimetria da Predictus",
+    "summary": "Uma plataforma que permite a advogados e departamentos jurídicos prever resultados de processos judiciais com base em dados reais de casos anteriores.",
+    "key_features": [
+      "Estimativa de prazos de processos",
+      "Análise de padrões em processos judiciais passados",
+      "Cálculo da probabilidade de sucesso antes de ajuizar uma ação",
+      "Estimativa de valores envolvidos nas ações",
+      "Uso de filtros para prever resultados antes de iniciar um processo"
+    ],
+    "error": false,
+    "source_url": "https://inforchannel.com.br/2025/04/23/predictus-lanca-software-capaz-de-prever-resultados-de-processos-judiciais/"
+  },
+  {
+    "product_name": "Módulo Dossiê Cadastral",
+    "summary": "Reúne dados cadastrais como endereço, telefone, últimas experiências profissionais, cadastro junto a receita federal, sociedade e vínculo com empresas.",
+    "key_features": [
+      "Informações essenciais de um CPF ou CNPJ",
+      "Centralização de dados para decisões estratégicas",
+      "Utilização em áreas como compliance, jurídico, RH ou análise de risco"
+    ],
+    "error": false,
+    "source_url": "https://centraldodireito.com.br/noticias/predictus-apresenta-novas-solucoes-de-analise-juridica-com-ia-na-fenalaw-2025"
+  },
+  {
+    "product_name": "ResumeAI",
+    "summary": "Gera automaticamente resumos de processos por meio de inteligência artificial.",
+    "key_features": [
+      "Automatização de resumos",
+      "Uso de inteligência artificial"
+    ],
+    "error": false,
+    "source_url": "https://centraldodireito.com.br/noticias/predictus-apresenta-novas-solucoes-de-analise-juridica-com-ia-na-fenalaw-2025"
+  },
+  {
+    "product_name": "Plano Pré-Pago",
+    "summary": "Oferece mais flexibilidade para quem deseja adquirir consultas sem recorrência anual.",
+    "key_features": [
+      "Flexibilidade na aquisição de consultas",
+      "Sem necessidade de assinatura anual"
+    ],
+    "error": false,
+    "source_url": "https://centraldodireito.com.br/noticias/predictus-apresenta-novas-solucoes-de-analise-juridica-com-ia-na-fenalaw-2025"
+  }
+]

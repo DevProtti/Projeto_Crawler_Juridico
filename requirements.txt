@@ -8,3 +8,4 @@ numpy
 pandas
 ipykernel
 matplotlib
+crawl4ai

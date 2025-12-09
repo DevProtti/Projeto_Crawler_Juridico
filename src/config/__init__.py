@@ -1,0 +1,7 @@
+from .settings import (
+    TAVILY_API_KEY,
+    OPENAI_API_KEY,
+    TAVILY_QUERIES,
+    RSS_FEEDS,
+    COSSINE_SIMILARITY_THRESHOLD
+)

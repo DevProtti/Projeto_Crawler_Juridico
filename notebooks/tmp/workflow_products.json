@@ -1,0 +1,127 @@
+[
+  {
+    "product_name": "Predictus Plataforma",
+    "summary": "Plataforma web que democratiza o acesso a dados de processos judiciais, permitindo consultas instantâneas em nível nacional diretamente do navegador.",
+    "key_features": [
+      "Acesso a dados organizados e estruturados sem necessidade de integração",
+      "Consultas instantâneas de processos judiciais",
+      "Ideal para usuários que preferem uma abordagem manual",
+      "Facilidade de compreensão e download das informações geradas"
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus_plataforma/"
+  },
+  {
+    "product_name": "Predictus API",
+    "summary": "API que permite a integração de dados de processos judiciais em sistemas de terceiros, facilitando o acesso a informações judiciais.",
+    "key_features": [
+      "Integração com sistemas de terceiros",
+      "Acesso a dados judiciais em tempo real",
+      "Facilidade de uso para desenvolvedores"
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus_plataforma/"
+  },
+  {
+    "product_name": "Predictus Jurimetria",
+    "summary": "Um módulo de análise preditiva que transforma milhões de processos judiciais em insights estratégicos, permitindo que advogados e departamentos jurídicos prevejam desfechos e tomem decisões informadas.",
+    "key_features": [
+      "Análise preditiva baseada em dados reais de mais de 700 milhões de processos judiciais.",
+      "Cobertura nacional com dados de mais de 90 tribunais brasileiros.",
+      "Atualização contínua e automática com mais de 1 milhão de atualizações por dia.",
+      "Resultados em até 3 segundos com visualização simplificada.",
+      "Interface prática e fácil de usar."
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus_jurimetria/"
+  },
+  {
+    "product_name": "Plataforma Web Predictus",
+    "summary": "Acesso a dados judiciais diretamente do navegador, permitindo consultas rápidas e intuitivas.",
+    "key_features": [
+      "Consulta por CPF, CNPJ, OAB ou número CNJ.",
+      "Visualização intuitiva de processos.",
+      "Painel com insights preditivos.",
+      "Organização automática das partes, classe, assunto, instância e vara."
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus_jurimetria/"
+  },
+  {
+    "product_name": "API Predictus",
+    "summary": "Integração de dados aos sistemas internos, permitindo automação de consultas e personalização de fluxos de trabalho.",
+    "key_features": [
+      "Automatização de consultas e filtros em escala.",
+      "Leitura padronizada de decisões e históricos.",
+      "Otimização de análise de risco, compliance, credit scoring e due diligence."
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus_jurimetria/"
+  },
+  {
+    "product_name": "Análise de crédito e risco",
+    "summary": "Fornece todos os processos judiciais vinculados a uma pessoa a partir de CPF/CNPJ ou nome, retornando resultados em menos de 3 segundos.",
+    "key_features": [
+      "Ideal para análise de crédito e risco, KYC, background check e due diligences",
+      "Acesso instantâneo a informações cruciais",
+      "Teste grátis"
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus-api/"
+  },
+  {
+    "product_name": "Diligência e análise detalhada de processos via CNJ",
+    "summary": "Acesso a informações detalhadas sobre qualquer processo judicial utilizando apenas o número CNJ.",
+    "key_features": [
+      "Informações precisas para avaliação completa",
+      "Essencial para diligência e análise específica de casos",
+      "Teste grátis"
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus-api/"
+  },
+  {
+    "product_name": "Análise e benchmarking de advogados",
+    "summary": "Consulta por OAB para acessar todos os processos judiciais em que um advogado específico representa uma das partes.",
+    "key_features": [
+      "Ideal para benchmarking e análise detalhada de carteiras de advogados",
+      "Insights valiosos sobre a atuação jurídica",
+      "Teste grátis"
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus-api/"
+  },
+  {
+    "product_name": "Consulta customizada de processos via filtros",
+    "summary": "Personaliza a busca por processos judiciais usando filtros específicos como classes processuais, assuntos e tribunais.",
+    "key_features": [
+      "Resultados precisos e adaptados às necessidades de análise",
+      "Ideal para busca de leads e precedentes jurídicos",
+      "Teste grátis"
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus-api/"
+  },
+  {
+    "product_name": "Jurimetria: previsões baseadas em dados judiciais",
+    "summary": "Consulta para obter previsões baseadas em estudos estatísticos de processos similares.",
+    "key_features": [
+      "Dados cruciais sobre possíveis desfechos de um caso",
+      "Ajuda na preparação processual e estratégia legal",
+      "Teste grátis"
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus-api/"
+  },
+  {
+    "product_name": "Integrações simples e poderosas",
+    "summary": "Integra dados de processos judiciais a diversos sistemas existentes na organização.",
+    "key_features": [
+      "Definição de regras de negócio",
+      "Automatização de fluxos de decisão",
+      "APIs projetadas para se adequarem à operação"
+    ],
+    "error": false,
+    "source_url": "https://predictus.inf.br/predictus-api/"
+  }
+]
