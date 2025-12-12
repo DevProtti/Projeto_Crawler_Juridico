@@ -36,7 +36,6 @@ async def _fetch_single_rss(session: aiohttp.ClientSession, url: str) -> List[Di
                     "title": entry.title,
                     "url": entry.link,
                     "content": summary,
-                    "source": feed.feed.get('title', 'Fonte RSS'),
                     "type": "rss",
                     "published_at": pub_date
                 })
@@ -56,13 +55,6 @@ async def fetch_rss_feeds() -> List[Dict]:
         return flat_results
 
 # --- TAVILY SEARCH ENGINE --- #
-def fetch_dates():
-    today = date.today()
-    previous_month = today - timedelta(days=90)
-
-    return (str(today), str(previous_month))
-
-
 async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -> List[Dict]:
     """
     Realiza uma busca assíncrona utilizando Taily sobre temas pré-definidos
@@ -72,7 +64,6 @@ async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -
         return []
 
     try:
-        date_today, date_today_minus_90_days = fetch_dates()   
         tavily_client = AsyncTavilyClient(api_key=TAVILY_API_KEY)
 
         tasks = []
@@ -80,10 +71,11 @@ async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -
             tasks.append(
                 tavily_client.search(
                     query=q,
+                    topic="news", 
+                    time_range="month",
                     max_results=max_results, 
-                    start_date=date_today_minus_90_days, 
-                    end_date=date_today,
-                    country="brazil" 
+                    country="brazil",
+                    search_depth="basic"
                 )
             )
 
@@ -99,12 +91,11 @@ async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -
             results = res.get("results", [])
             valid_items = [
                 {
-                    "title": item.get('title'),
-                    "url": item.get('url'),
-                    "content": item.get('content'),
-                    "source": "Tavily Search",
+                    "title": item.get('title', ""),
+                    "url": item.get('url', ""),
+                    "content": item.get('content', ""),
                     "type": "tavily_search",
-                    "published_at": f"Entre {date_today_minus_90_days} e {date_today}"
+                    "published_at": item.get("published_date", "")
                 }
                 for item in results
                 if item.get("score", 0) >= 0.75

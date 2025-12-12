@@ -21,8 +21,6 @@ class Clustering:
         """
         if not documents:
             return []
-        
-        logger.info(f"--- INICIANDO CLUSTERIZAÇÃO DE {len(documents)} DOCS ---")
 
         # 1.Gera textos com os respectivos títulos 
         texts = [f"{d['title']}\n{d['content']}" for d in documents]
@@ -47,8 +45,6 @@ class Clustering:
         for idx, label in enumerate(labels):
             clusters_map[label]["docs"].append(documents[idx])
             clusters_map[label]["vectors"].append(matrix[idx])
-
-        logger.info(f"Grupos formados: {len(clusters_map)}")
 
         # 5. Seleção Estratégica (Centróide + Densos)
         final_themes = []
@@ -124,5 +120,5 @@ class Clustering:
 
 # Wrapper para facilitar importação
 def cluster_text_documents(documents: List[Dict]) -> List[Dict]:
-    service = ClusteringService(similarity_threshold=0.70)
+    service = Clustering(similarity_threshold=0.70)
     return service.process_documents(documents)
