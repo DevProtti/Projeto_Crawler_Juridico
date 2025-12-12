@@ -5,7 +5,7 @@ import feedparser
 import os
 from datetime import timedelta, date
 from typing import List, Dict, Optional
-from tavily import TavilyClient
+from tavily import AsyncTavilyClient
 
 logger = logging.getLogger(__name__)
 
@@ -15,8 +15,7 @@ from src.config.settings import (
     TAVILY_API_KEY
 )
 
-# --- RSS FEED PARSER SEARCH ENGINE ---
-
+# --- RSS FEED PARSER SEARCH ENGINE --- #
 async def _fetch_single_rss(session: aiohttp.ClientSession, url: str) -> List[Dict]:
     """Busca e normaliza as URL buscadas um único feed RSS."""
     try:
@@ -43,7 +42,6 @@ async def _fetch_single_rss(session: aiohttp.ClientSession, url: str) -> List[Di
                 })
             return normalized
     except Exception as e:
-        print(f"Erro no RSS {url}: {e}")
         logger.error(f"Erro no RSS {url}: {e}")
         return []
 
@@ -52,15 +50,12 @@ async def fetch_rss_feeds() -> List[Dict]:
     async with aiohttp.ClientSession() as session:
         tasks = [_fetch_single_rss(session, url) for url in RSS_FEEDS]
         results = await asyncio.gather(*tasks)
-        
-        # Colocar resultados dentro de somente uma lista
         flat_results = [item for sublist in results for item in sublist]
 
         logger.info(f"Busca RSS finalizada. {len(flat_results)} encontrados.")
         return flat_results
 
-# --- TAVILY SEARCH ENGINE ---
-
+# --- TAVILY SEARCH ENGINE --- #
 def fetch_dates():
     today = date.today()
     previous_month = today - timedelta(days=90)
@@ -73,18 +68,17 @@ async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -
     Realiza uma busca assíncrona utilizando Taily sobre temas pré-definidos
     """
     if not TAVILY_API_KEY:
-        print("TAVILY_API_KEY não encontrada. Pulando busca.")
+        logger.warning("TAVILY_API_KEY não encontrada. Pulando busca.")
         return []
 
     try:
         date_today, date_today_minus_90_days = fetch_dates()   
-        tavily_client = TavilyClient(api_key=TAVILY_API_KEY)
+        tavily_client = AsyncTavilyClient(api_key=TAVILY_API_KEY)
 
         tasks = []
         for q in queries:
             tasks.append(
-                asyncio.to_thread(
-                    tavily_client.search,
+                tavily_client.search(
                     query=q,
                     max_results=max_results, 
                     start_date=date_today_minus_90_days, 
@@ -97,22 +91,27 @@ async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -
 
         normalized = []
 
-        for res in responses:           
+        for res in responses:     
             if isinstance(res, Exception):
                 logger.error(f"Erro em uma das buscas Tavily: {res}")
                 continue
-            
-            if "results" in res and res["results"]:
-                for item in res["results"]:
-                    if item.get("score", 0) >= 0.75:
-                        normalized.append({
-                            "title": item.get('title'),
-                            "url": item.get('url'),
-                            "content": item.get('content'),
-                            "source": "Tavily Search",
-                            "type": "tavily_search",
-                            "published_at": f"Entre {date_today_minus_90_days} e {date_today}"
-                        })
+
+            results = res.get("results", [])
+            valid_items = [
+                {
+                    "title": item.get('title'),
+                    "url": item.get('url'),
+                    "content": item.get('content'),
+                    "source": "Tavily Search",
+                    "type": "tavily_search",
+                    "published_at": f"Entre {date_today_minus_90_days} e {date_today}"
+                }
+                for item in results
+                if item.get("score", 0) >= 0.75
+            ]
+
+            # Adiciona todos de uma vez à lista principal
+            normalized.extend(valid_items)
 
         logger.info(f"Busca Tavily finalizada. {len(normalized)} encontrados.")
         return normalized
@@ -121,18 +120,15 @@ async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -
         print(f"Erro no Tavily: {e}")
         return []
 
-# --- FUNÇÃO ORQUESTRADORA PARA O LANGGRAPH ---
-
+# --- FUNÇÃO ORQUESTRADORA PARA O LANGGRAPH --- #
 async def get_all_initial_documents() -> List[Dict]:
     """
-    Função Mestra: Dispara RSS e Tavily ao mesmo tempo e une os resultados.
-    Esta é a única função que seu LangGraph precisa chamar.
+    Função que dispara RSS e Tavily ao mesmo tempo e une os resultados.
     """
     logger.info(f"INÍCIO DA INGESTÃO")
     
     queries = TAVILY_QUERIES[:1]
 
-    # Roda RSS e Tavily em paralelo
     results = await asyncio.gather(
         fetch_rss_feeds(),
         fetch_tavily_search(queries, max_results=4)
@@ -140,11 +136,10 @@ async def get_all_initial_documents() -> List[Dict]:
     
     rss_docs, tavily_docs = results
     
-    # Unificação
     all_docs = rss_docs + tavily_docs
     return all_docs
  
-# --- TESTE RÁPIDO (Executar direto este arquivo) ---
+# --- TESTE RÁPIDO --- #
 if __name__ == "__main__":
     from src.utils.logger import setup_logger
     setup_logger()

@@ -7,13 +7,13 @@ from typing_extensions import List, Dict
 
 async def extract_content_from_url(url: str) -> str:
     """
-    Acessa uma URL específica e extrai o conteúdo principal em Markdown.
+    Acessa uma URL específica, extrai o conteúdo principal e retorna em Markdown.
     """
     try:
 
         prune_filter = PruningContentFilter(
             # Lower → more content retained, higher → more content pruned
-            threshold=0.45,
+            threshold=0.50,
             threshold_type="dynamic",
             min_word_threshold=5      
         )   

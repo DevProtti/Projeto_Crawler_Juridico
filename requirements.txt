@@ -1,5 +1,4 @@
 langgraph
-langchain-tavily
 langchain-ollama
 langchain-openai
 langchain-core
@@ -9,3 +8,6 @@ pandas
 ipykernel
 matplotlib
 crawl4ai
+tavily-python
+feedparser
+aiohttp
