@@ -2,7 +2,7 @@ import asyncio
 from pydantic import BaseModel
 from langgraph.graph import StateGraph, START, END
 from src.core.discovery import get_all_initial_documents
-from src.core.extractor import cluster_text_documents
+from src.core.extractor import batch_extract_contents
 from state import State, DocumentObj, ThemeCluster, ContentBrief
 import logging
 
@@ -24,7 +24,8 @@ async def ingestion_node(state: State) -> State:
         
 
 async def process_info_node(state: State)-> State:
-    clustaer_classes = cluster_text_documents(state.raw_documents)
+    urls = [document.url for document in state.raw_documents]
+    cluster_classes = await batch_extract_contents(urls)
 
 
 

@@ -1,38 +1,51 @@
-# src/utils/logger.py
 import logging
-import sys
 import os
-from src.config.settings import LOG_LEVEL # Vamos criar isso no passo 2
+from logging.handlers import RotatingFileHandler
 
-def setup_logger():
+def setup_logger(log_level=logging.INFO):
     """
     Configura o logger raiz da aplicação.
-    Chame esta função apenas UMA vez no app.py.
+    Chame esta função APENAS UMA VEZ no ponto de entrada (app.py ou main.py).
     """
+    
     # 1. Cria a pasta de logs se não existir
-    if not os.path.exists("logs"):
-        os.makedirs("logs")
+    log_dir = "logs"
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
 
-    # 2. Define o formato (Data - Nome do Modulo - Nivel - Mensagem)
-    log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    formatter = logging.Formatter(log_format)
+    # 2. Define o formato (Timestamp | Nível | Arquivo | Mensagem)
+    log_format = logging.Formatter(
+        '%(asctime)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s'
+    )
 
-    # 3. Configura o Logger Raiz
-    root_logger = logging.getLogger()
-    root_logger.setLevel(LOG_LEVEL)
+    # 3. Pega o logger raiz
+    logger = logging.getLogger()
+    logger.setLevel(log_level)
 
-    # Evita duplicação de logs se a função for chamada mais de uma vez
-    if root_logger.hasHandlers():
-        root_logger.handlers.clear()
+    # Evita duplicação de handlers se a função for chamada mais de uma vez
+    if logger.hasHandlers():
+        logger.handlers.clear()
 
-    # 4. Handler para o Console (Terminal)
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(formatter)
-    root_logger.addHandler(console_handler)
+    # 4. Handler de Arquivo (Com Rotação)
+    # RotatingFileHandler evita que o arquivo cresça infinitamente.
+    # Aqui: Máximo 5MB por arquivo, mantém os últimos 3 arquivos.
+    file_handler = RotatingFileHandler(
+        filename=os.path.join(log_dir, "app.log"),
+        maxBytes=5*1024*1024, 
+        backupCount=3,
+        encoding='utf-8'
+    )
+    file_handler.setFormatter(log_format)
+    logger.addHandler(file_handler)
 
-    # 5. Handler para Arquivo (Salva histórico)
-    file_handler = logging.FileHandler("logs/app.log", encoding="utf-8")
-    file_handler.setFormatter(formatter)
-    root_logger.addHandler(file_handler)
+    # 5. Handler de Console (Para ver no terminal enquanto desenvolve)
+    # console_handler = logging.StreamHandler()
+    # console_handler.setFormatter(log_format)
+    # logger.addHandler(console_handler)
 
-    logging.info("Logger inicializado com sucesso.")
+    # Ajusta logs de bibliotecas barulhentas para não poluir
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
+    logging.getLogger("openai").setLevel(logging.WARNING)
+
+    return logger

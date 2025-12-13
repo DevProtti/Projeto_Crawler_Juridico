@@ -1,9 +1,11 @@
 import asyncio
-from crawl4ai import AsyncWebCrawler, CrawlerRunConfig
+import logging
+from crawl4ai import AsyncWebCrawler, CrawlerRunConfig, BrowserConfig
 from crawl4ai.content_filter_strategy import PruningContentFilter
 from crawl4ai.markdown_generation_strategy import DefaultMarkdownGenerator
 from typing_extensions import List, Dict
 
+logger = logging.getLogger(__name__)
 
 async def extract_content_from_url(url: str) -> str:
     """
@@ -12,7 +14,7 @@ async def extract_content_from_url(url: str) -> str:
     try:
 
         prune_filter = PruningContentFilter(
-            # Lower → more content retained, higher → more content pruned
+            # Mais baixo → mais contexto retido, mais alto → mais contexto cortado
             threshold=0.50,
             threshold_type="dynamic",
             min_word_threshold=5      
@@ -20,11 +22,15 @@ async def extract_content_from_url(url: str) -> str:
 
         md_generator = DefaultMarkdownGenerator(content_filter=prune_filter)
         config = CrawlerRunConfig(
-            markdown_generator=md_generator
+            markdown_generator=md_generator,
+            log_console=False,
+            verbose=False
         )
 
         # O crawl4ai gerencia o navegador internamente
-        async with AsyncWebCrawler(verbose=False) as crawler:
+        #browser_config = BrowserConfig(verbose=False)
+        #config=browser_config
+        async with AsyncWebCrawler() as crawler:
             result = await crawler.arun(
                 url=url,
                 config=config
@@ -33,16 +39,18 @@ async def extract_content_from_url(url: str) -> str:
             if result.success:
                 return result.markdown.fit_markdown
             else:
-                print(f"Falha ao extrair {url}: {result.error_message}")
+                logger.error(f"Falha ao extrair {url}: {result.error_message}")
                 return ""
     except Exception as e:
-        print(f"Erro crítico no crawl4ai para {url}: {e}")
+        logger.error(f"Erro crítico no crawl4ai para {url}: {e}")
         return ""
 
 async def batch_extract_contents(urls: List[str], max_concurrent: int = 5) -> Dict[str, str]:
     """
     Processa várias URLs com limitação de concorrência para evitar overload de RAM.
     """
+    
+    logger.info("# =====  PROCESSO DE EXTRAÇÃO INICIADO ===== #")
     
     results = {}
     semaphore = asyncio.Semaphore(max_concurrent)
@@ -58,7 +66,7 @@ async def batch_extract_contents(urls: List[str], max_concurrent: int = 5) -> Di
         for content in contents:
             results[f"{content[0]}"] = f"{content[1]}"
 
-        
+    logger.info("# =====  PROCESSO DE EXTRAÇÃO FINALIZADO ===== #")
     return results
 
 if __name__ == '__main__':
@@ -66,7 +74,7 @@ if __name__ == '__main__':
 
 
     searched_items = asyncio.run(get_all_initial_documents())
-    urls = [item.get("url", "") for item in searched_items[:10]]
+    urls = [item.url for item in searched_items[:10]]
     results = asyncio.run(batch_extract_contents(urls=urls))
 
     for url, content in results.items():

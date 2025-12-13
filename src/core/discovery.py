@@ -35,7 +35,6 @@ async def _fetch_single_rss(session: aiohttp.ClientSession, url: str) -> List[Di
                 normalized.append({
                     "title": entry.title,
                     "url": entry.link,
-                    "content": summary,
                     "type": "rss",
                     "published_at": pub_date
                 })
@@ -93,7 +92,6 @@ async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -
                 {
                     "title": item.get('title', ""),
                     "url": item.get('url', ""),
-                    "content": item.get('content', ""),
                     "type": "tavily_search",
                     "published_at": item.get("published_date", "")
                 }
@@ -108,32 +106,40 @@ async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -
         return normalized
 
     except Exception as e:
-        print(f"Erro no Tavily: {e}")
+        logger.error(f"Erro no Tavily: {e}")
         return []
 
 # --- FUNÇÃO ORQUESTRADORA PARA O LANGGRAPH --- #
-async def get_all_initial_documents() -> List[Dict]:
+async def get_all_initial_documents(queries: Optional[List[str]] = None) -> List[Dict]:
     """
     Função que dispara RSS e Tavily ao mesmo tempo e une os resultados.
     """
-    logger.info(f"INÍCIO DA INGESTÃO")
+    logger.info(f"# ===== PROCESSO DE INGESTÃO INICIADO ===== #")
     
-    queries = TAVILY_QUERIES[:1]
+    if not queries:
+        queries = TAVILY_QUERIES[:1]
 
     results = await asyncio.gather(
         fetch_rss_feeds(),
-        fetch_tavily_search(queries, max_results=4)
+        #fetch_tavily_search(queries, max_results=4)
     )
+
+    all_docs = results[:10]
+    # rss_docs, tavily_docs = results
     
-    rss_docs, tavily_docs = results
-    
-    all_docs = rss_docs + tavily_docs
+    # all_docs = rss_docs + tavily_docs
+    logger.info(len(all_docs))
+    logger.info(f"# ===== PROCESSO DE INGESTÃO Finalizado ===== #")
     return all_docs
  
-# --- TESTE RÁPIDO --- #
+
 if __name__ == "__main__":
     from src.utils.logger import setup_logger
     setup_logger()
 
-    docs = asyncio.run(get_all_initial_documents())
-    print(docs)
+    searched_docs = asyncio.run(get_all_initial_documents())
+    for search in searched_docs:
+        for idx, item in enumerate(search):
+            print(f" =========== Documento {idx} =========== ")
+            print(item)
+            print(f" ======================================= \n\n")
