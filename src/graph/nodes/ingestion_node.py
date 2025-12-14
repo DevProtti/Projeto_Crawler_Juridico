@@ -32,7 +32,7 @@ async def ingestion_node(state: State) -> State:
             new_dict = {
                 "title": searched_doc.get("title"),
                 "url": url_key,
-                "type": searched_doc.get("type"),
+                "source_type": searched_doc.get("type"),
                 "published_at": searched_doc.get("published_at"),
                 "content": scrapped_data.get("content")
             }

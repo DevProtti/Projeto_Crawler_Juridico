@@ -1,0 +1,1 @@
+from .prompts import PROMPT_PRODUCT_MANAGER

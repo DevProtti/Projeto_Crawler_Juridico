@@ -26,6 +26,12 @@ class DocumentObj(BaseModel):
         description="Data de publicação em formato ISO ou string legível."
     )
 
+    source_type: Literal["tavily_search", "rss_feed"] = Field(
+        ...,
+        description="Indica se o documento foi obtido de uma busca Tavily ou de um feed RSS."
+    )
+    
+
 
 class ThemeSynthesisOutput(BaseModel):
     """Estrutura exata que o LLM deve preencher ao processar os documentos clusterizados."""
@@ -42,6 +48,13 @@ class ThemeSynthesisOutput(BaseModel):
         description="Explicação técnica do porquê esses documentos foram agrupados (ex: 'Todos tratam da lei X')."
     )
     
+
+
+class StrategicReasoning(BaseModel):
+    """Estrutura para garantir que o LLM justifique a relevância."""
+    final_score: int = Field(..., description="Score final de relevância (0-100). Deve ser consistente com o match vetorial.")
+    reasoning: str = Field(..., description="Explicação detalhada de COMO este tema impacta o produto identificado.")
+
 
 class ThemeCluster(BaseModel):
     """

@@ -2,27 +2,22 @@
 import asyncio
 import logging
 import warnings
+from dotenv import load_dotenv, find_dotenv
 
 # Langgraph
 from langgraph.graph import StateGraph, START, END
 
 # Importações internas
-from src.graph.state import State, DocumentObj, ThemeCluster, ContentBrief
+from src.graph.state import State
 from src.utils.logger import setup_logger
 from src.utils.decorators import measure_execution_time
-from src.graph.nodes import ingestion_node, process_info_node, filter_node
-#from src.utils.knowledge_base import kb_engine # Importar sua engine do Supabase (se já tiver) ou mocks
+from src.graph.nodes import ingestion_node, process_info_node, filter_node, editorial_node, save_node
 
+load_dotenv(find_dotenv())
 warnings.filterwarnings("ignore", message=".*Core Pydantic V1 functionality.*")
 setup_logger()
 logger = logging.getLogger(__name__)
 
-
-
-
-@measure_execution_time
-async def editorial_node(state: State) -> State:
-    pass
 
 @measure_execution_time
 async def check_relevance(state: State) -> str:
@@ -41,6 +36,7 @@ builder.add_node("ingestion", ingestion_node)
 builder.add_node("process_info", process_info_node)
 builder.add_node("filter", filter_node)
 builder.add_node("editorial", editorial_node)
+builder.add_node("save", save_node)
 
 # Adicionando edges
 builder.add_edge(START, "ingestion")
@@ -54,7 +50,8 @@ builder.add_conditional_edges(
         "end": END
     }
 )
-builder.add_edge("editorial", END)
+builder.add_edge("editorial", "save")
+builder.add_edge("save", END)
 
 # Compilando o grafo
 graph = builder.compile()

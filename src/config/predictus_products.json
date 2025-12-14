@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Predictus Plataforma",
+        "description": "A Predictus Plataforma é uma solução robusta que centraliza e automatiza processos jurídicos, permitindo que departamentos jurídicos e escritórios de advocacia gerenciem seus casos de forma mais eficiente. A plataforma oferece funcionalidades como gestão de documentos, controle de prazos e acompanhamento de processos, tudo em um ambiente seguro e de fácil navegação. \n\nA dor principal que a Predictus Plataforma resolve é a complexidade e o tempo gasto na gestão manual de processos jurídicos. Com a automação e centralização de informações, os usuários podem reduzir significativamente o risco de erros humanos, melhorar a comunicação interna e externa, e aumentar a produtividade geral do departamento jurídico. Além disso, a plataforma permite uma visão holística dos casos, facilitando a tomada de decisões estratégicas.",
+        "target_audience": "Departamentos Jurídicos, Escritórios de Advocacia, Advogados Corporativos"
+    },
+    {
+        "name": "Predictus Jurimetria",
+        "description": "A Predictus Jurimetria é uma ferramenta analítica avançada que utiliza dados históricos e inteligência artificial para prever resultados de litígios e auxiliar na tomada de decisões estratégicas. A solução oferece insights valiosos sobre tendências judiciais, permitindo que advogados e gestores jurídicos planejem suas estratégias com base em dados concretos e previsões precisas.\n\nA principal dor que a Predictus Jurimetria resolve é a incerteza e o risco associados a processos judiciais. Ao fornecer previsões baseadas em dados, a ferramenta ajuda a mitigar riscos, otimizar recursos e aumentar as chances de sucesso em litígios. Isso é especialmente valioso em um ambiente jurídico onde decisões informadas podem ter um impacto significativo nos resultados financeiros e reputacionais de uma organização.",
+        "target_audience": "Advogados, Gestores Jurídicos, Departamentos Jurídicos, Escritórios de Advocacia"
+    },
+    {
+        "name": "Predictus API",
+        "description": "A Predictus API é uma interface de programação que permite a integração de funcionalidades da Predictus com outros sistemas e plataformas utilizadas por empresas. Com a API, é possível automatizar fluxos de trabalho, sincronizar dados e personalizar soluções de acordo com as necessidades específicas de cada organização.\n\nA dor que a Predictus API resolve é a falta de integração e comunicação entre diferentes sistemas de gestão utilizados por empresas. Ao oferecer uma solução flexível e personalizável, a API permite que as organizações conectem suas ferramentas de forma eficiente, eliminando silos de informação e melhorando a colaboração entre equipes. Isso resulta em processos mais ágeis e uma melhor alocação de recursos.",
+        "target_audience": "Desenvolvedores de Software, Equipes de TI, Empresas que utilizam múltiplos sistemas de gestão"
+    }
+]

@@ -9,10 +9,11 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 
 # Importações internas
-from src.core.clustering import cluster_text_documents
-from src.graph.state import State, ThemeCluster, ThemeSynthesisOutput
 from src.utils.logger import setup_logger
+from src.utils.prompts import PROMPT_ANALYST
+from src.core.clustering import cluster_text_documents
 from src.utils.decorators import measure_execution_time
+from src.graph.state import State, ThemeCluster, ThemeSynthesisOutput
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -31,7 +32,6 @@ async def _process_single_cluster(cluster_data: Dict[str, Any], semaphore: async
         rep_docs = cluster_data['representative_docs']
 
         docs_context_list = []
-        print(f"Cluster ID: {cluster_id}")
         for i, doc in enumerate(rep_docs):
             title = doc.title
             content = doc.content
@@ -44,33 +44,11 @@ async def _process_single_cluster(cluster_data: Dict[str, Any], semaphore: async
                 f"Conteúdo: {content[:2000]}..."
             )
             
-            print(doc_str)
-            print()
             docs_context_list.append(doc_str)
 
         full_context = "\n\n".join(docs_context_list)
 
-        prompt = ChatPromptTemplate.from_template("""
-        Você é um Analista de Inteligência Sênior.
-        Você recebeu um agrupamento de {num_docs} notícias que tratam do mesmo tema.
-        
-        Sua tarefa é ler TODAS as fontes abaixo e gerar uma síntese unificada.
-        
-        FONTES:
-        {full_context}
-        
-        INSTRUÇÕES:
-        1. Identifique o fato central comum a todas as notícias.
-        2. Se houver divergência ou detalhes extras em um documento específico, mencione.
-        3. Gere um JSON estrito.
-
-        FORMATO JSON ESPERADO:
-        {{
-            "topic_name": "Nome curto e jornalístico do tema (máx 6 palavras)",
-            "summary": "Resumo denso de 2 ou 3 parágrafos que consolida as informações de todas as fontes.",
-            "reasoning": "Explique brevemente por que essas notícias formam um cluster coeso."
-        }}
-        """)
+        prompt = ChatPromptTemplate.from_template(PROMPT_ANALYST)
 
         main_chain = prompt | llm.with_structured_output(ThemeSynthesisOutput)
         fallback_chain = prompt | llm_fallback.with_structured_output(ThemeSynthesisOutput)

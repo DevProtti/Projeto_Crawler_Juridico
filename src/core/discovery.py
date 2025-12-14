@@ -35,7 +35,7 @@ async def _fetch_single_rss(session: aiohttp.ClientSession, url: str) -> List[Di
                 normalized.append({
                     "title": entry.title,
                     "url": entry.link,
-                    "type": "rss",
+                    "type": "rss_feed",
                     "published_at": pub_date
                 })
             return normalized
@@ -116,11 +116,11 @@ async def get_all_initial_documents(queries: Optional[List[str]] = None) -> List
     logger.info(f"# ===== PROCESSO DE BUSCA INICIADO ===== #")
     
     if not queries:
-        queries = TAVILY_QUERIES[:5]
+        queries = TAVILY_QUERIES[:10]
 
     results = await asyncio.gather(
         fetch_rss_feeds(),
-        fetch_tavily_search(queries, max_results=10)
+        fetch_tavily_search(queries, max_results=25)
     )
 
     rss_docs, tavily_docs = results
