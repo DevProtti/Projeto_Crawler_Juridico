@@ -52,7 +52,7 @@ async def batch_extract_contents(urls: List[str], max_concurrent: int = 5) -> Di
     
     logger.info("# =====  PROCESSO DE EXTRAÇÃO INICIADO ===== #")
     
-    results = {}
+    results = []
     semaphore = asyncio.Semaphore(max_concurrent)
 
     async def semaphore_task(url):
@@ -64,7 +64,11 @@ async def batch_extract_contents(urls: List[str], max_concurrent: int = 5) -> Di
     
     if contents:
         for content in contents:
-            results[f"{content[0]}"] = f"{content[1]}"
+            new_item = {
+                "url": content[0],
+                "content": content[1]
+            }
+            results.append(new_item)
 
     logger.info("# =====  PROCESSO DE EXTRAÇÃO FINALIZADO ===== #")
     return results
@@ -74,13 +78,10 @@ if __name__ == '__main__':
 
 
     searched_items = asyncio.run(get_all_initial_documents())
-    urls = [item.url for item in searched_items[:10]]
+    urls = [item['url'] for item in searched_items[:10]]
     results = asyncio.run(batch_extract_contents(urls=urls))
-
-    for url, content in results.items():
-        print(f"URL: {url}")
-        print(f"Markdown:\n\n{content}\n\n")
-        print("==="*50)
+    print(results)
+    
 
 
 

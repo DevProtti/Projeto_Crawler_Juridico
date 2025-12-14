@@ -27,6 +27,22 @@ class DocumentObj(BaseModel):
     )
 
 
+class ThemeSynthesisOutput(BaseModel):
+    """Estrutura exata que o LLM deve preencher ao processar os documentos clusterizados."""
+    topic_name: str = Field(
+        ..., 
+        description="Nome curto e jornalístico do tema (máx 6 palavras). Ex: 'Aumento de Fraudes no Pix'."
+    )
+    summary: str = Field(
+        ..., 
+        description="Resumo denso de 2 ou 3 parágrafos consolidando os fatos de todas as fontes."
+    )
+    reasoning: str = Field(
+        ..., 
+        description="Explicação técnica do porquê esses documentos foram agrupados (ex: 'Todos tratam da lei X')."
+    )
+    
+
 class ThemeCluster(BaseModel):
     """
     Representa o tema central de cada cluster encontrado pelo algoritmo de clusterização com base nos 3 principais documentos do cluster

@@ -1,44 +1,34 @@
+# utilitarios
 import asyncio
-from pydantic import BaseModel
-from langgraph.graph import StateGraph, START, END
-from src.core.discovery import get_all_initial_documents
-from src.core.extractor import batch_extract_contents
-from state import State, DocumentObj, ThemeCluster, ContentBrief
 import logging
+import warnings
 
+# Langgraph
+from langgraph.graph import StateGraph, START, END
+
+# Importações internas
+from src.graph.state import State, DocumentObj, ThemeCluster, ContentBrief
+from src.utils.logger import setup_logger
+from src.utils.decorators import measure_execution_time
+from src.graph.nodes import ingestion_node, process_info_node, filter_node
+#from src.utils.knowledge_base import kb_engine # Importar sua engine do Supabase (se já tiver) ou mocks
+
+warnings.filterwarnings("ignore", message=".*Core Pydantic V1 functionality.*")
+setup_logger()
 logger = logging.getLogger(__name__)
 
-async def ingestion_node(state: State) -> State: 
-    response = await get_all_initial_documents()
-
-    docs_objects = []
-    for result in response:
-        try:
-            doc_obj = DocumentObj(**result)
-            docs_objects.append(doc_obj)
-        except Exception as e:
-            logger.error(f"Erro ao validar documento {result.get('url', '?')}: {e}")
-            continue
-
-    return {"raw_documents": docs_objects}
-        
-
-async def process_info_node(state: State)-> State:
-    urls = [document.url for document in state.raw_documents]
-    cluster_classes = await batch_extract_contents(urls)
 
 
 
-async def filter_node(state: State) -> State:
-    # TODO Filtrar os temas que tem relevância com o produto
+@measure_execution_time
+async def editorial_node(state: State) -> State:
     pass
 
-async def editorial_node(state: State) -> State: 
-    pass
-
-
+@measure_execution_time
 async def check_relevance(state: State) -> str:
-    pass
+    if state.identified_themes:
+        return "editorial"
+    return "end"
 
 
 # --- CONSTRUÇÃO DO GRAFO --- #
@@ -54,8 +44,8 @@ builder.add_node("editorial", editorial_node)
 
 # Adicionando edges
 builder.add_edge(START, "ingestion")
-builder.add_edge("ingestion", "processing")
-builder.add_edge("processing", "filter")
+builder.add_edge("ingestion", "process_info")
+builder.add_edge("process_info", "filter")
 builder.add_conditional_edges(
     "filter",
     check_relevance,
@@ -68,3 +58,6 @@ builder.add_edge("editorial", END)
 
 # Compilando o grafo
 graph = builder.compile()
+
+if __name__ == "__main__":
+    response = asyncio.run(graph.ainvoke(input={}))

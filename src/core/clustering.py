@@ -13,6 +13,7 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
+
 logger = logging.getLogger(__name__)
 
 class Clustering:
@@ -59,23 +60,23 @@ class Clustering:
             clusters_map[label]["docs"].append(documents[idx])
             clusters_map[label]["vectors"].append(matrix[idx])
 
-        final_themes = []
+        final_clusters = []
         for label, data in clusters_map.items():
             cluster_docs = data["docs"]
             cluster_vectors = np.array(data["vectors"])
             
             # Aplica a lógica de seleção dos "Melhores Representantes"
-            selected_docs = self._select_representative_docs(cluster_docs, cluster_vectors)
+            selected_docs: List[DocumentObj] = self._select_representative_docs(cluster_docs, cluster_vectors)
             
-            theme_obj = {
+            cluster_obj = {
                 "cluster_id": int(label),
                 "total_docs": len(cluster_docs),
                 "representative_docs": selected_docs,
                 "all_urls": [d.url for d in cluster_docs]
             }
-            final_themes.append(theme_obj)
+            final_clusters.append(cluster_obj)
 
-        return final_themes
+        return final_clusters
 
     def _select_representative_docs(self, docs: List[DocumentObj], vectors: np.ndarray) -> List[Dict]:
         """
@@ -132,7 +133,7 @@ class Clustering:
 def cluster_text_documents(documents: List[DocumentObj]) -> List[Dict]:
     logger.info("# =====  PROCESSO DE CLUSTERIZAÇÃO INICIADO ===== #")
     
-    service = Clustering(similarity_threshold=0.70)
+    service = Clustering(similarity_threshold=0.85)
     generated_clusters = service.process_documents(documents)
 
     logger.info("# =====  PROCESSO DE CLUSTERIZAÇÃO FINALIZADO ===== #")
