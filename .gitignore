@@ -211,3 +211,5 @@ logs/
 *.log
 .vscode/
 notebooks/
+tests/
+outputs/
