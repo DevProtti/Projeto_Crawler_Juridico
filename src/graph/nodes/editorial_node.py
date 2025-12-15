@@ -12,7 +12,7 @@ from langchain_core.prompts import ChatPromptTemplate
 # Importações internas
 from src.utils.logger import setup_logger
 from src.utils.knowledge_base import PredictusKB
-from src.utils.prompts import PROMPT_CHIEF_EDITOR
+from src.core.prompts import PROMPT_CHIEF_EDITOR
 from src.utils.decorators import measure_execution_time
 from src.graph.state import State, ContentBrief, ThemeCluster
 
@@ -21,24 +21,28 @@ load_dotenv(find_dotenv())
 setup_logger()
 logger = logging.getLogger(__name__)
 
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-llm_fallback = ChatOpenAI(model="gpt-4o", temperature=0)
+llm = ChatOpenAI(model="gpt-5-mini-2025-08-07", temperature=0)
+llm_fallback = ChatOpenAI(model="gpt-5.2-2025-12-11", temperature=0)
 
-MAX_CONCURRENT_WRITERS = 10
-
+kb_engine = PredictusKB()
+MAX_CONCURRENT_WRITERS = 15
 
 async def _create_single_brief(
     theme: ThemeCluster, 
     semaphore: asyncio.Semaphore
 ) -> Optional[ContentBrief]:
     async with semaphore:
+        all_products_list = kb_engine.get_all_product_names()
         prompt = ChatPromptTemplate.from_template(PROMPT_CHIEF_EDITOR)
         brief: Optional[ContentBrief] = None
+        
         input_data = {
             "theme_id": theme.cluster_id,
             "topic": theme.topic_name,
             "summary": theme.synthesized_summary,
-            "reasoning": theme.reasoning
+            "reasoning": theme.reasoning,
+            "suggested_product": theme.suggested_product,
+            "available_products": all_products_list
         }
         try:
             chain = prompt | llm.with_structured_output(ContentBrief)

@@ -10,7 +10,7 @@ from langchain_core.prompts import ChatPromptTemplate
 # Importações internas
 from src.utils.logger import setup_logger
 from src.utils.knowledge_base import PredictusKB
-from src.utils.prompts import PROMPT_PRODUCT_MANAGER
+from src.core.prompts import PROMPT_PRODUCT_MANAGER
 from src.utils.decorators import measure_execution_time
 from src.graph.state import State, ThemeCluster, StrategicReasoning
 
@@ -31,7 +31,6 @@ async def filter_node(state: State) -> dict:
     kb_engine = PredictusKB()
 
     for theme in state.identified_themes:
-        # Verifica por similaridade de cosseno se o vetor do sumário do cluster tem relação com agum dos produtos da Predictus
         best_product_name, vector_score = kb_engine.get_best_match(theme.synthesized_summary)
         logger.info(f"Tema: '{theme.topic_name}' | Match: '{best_product_name}' | Score: {vector_score:.2f}%")
 
@@ -66,11 +65,12 @@ async def filter_node(state: State) -> dict:
         if analysis:
             theme.score = analysis.final_score
             theme.reasoning = analysis.reasoning
+            theme.suggested_product = best_product_name
             
-            if theme.score >= 40:
+            if theme.score >= 45:
                 approved_themes.append(theme)
             else:
-               logger.warning(f"Vetor aprovou ({vector_score:.1f}%), mas LLM rejeitou ({theme.score}): {theme.topic_name}")
+                logger.warning(f"Vetor aprovou ({vector_score:.1f}%), mas LLM rejeitou ({theme.score}): {theme.topic_name}")
 
     logger.info(f"Filtro concluído. {len(approved_themes)} de {len(state.identified_themes)} temas avançaram.")
     logger.info(" # ===== FIM FILTRO VETORIAL + ESTRATÉGICO ===== #")

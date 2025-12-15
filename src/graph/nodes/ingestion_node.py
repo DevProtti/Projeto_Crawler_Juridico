@@ -19,7 +19,7 @@ async def ingestion_node(state: State) -> State:
     unique_docs_map = {doc["url"]: doc for doc in searched_raw_docs if doc.get("url")}
     searched_docs = list(unique_docs_map.values())
     urls = list(unique_docs_map.keys())
-    scrapped_documents = await batch_extract_contents(urls, max_concurrent=10)
+    scrapped_documents = await batch_extract_contents(urls, max_concurrent=15)
 
     scrapped_map = {doc["url"]: doc for doc in scrapped_documents if "url" in doc}
 

@@ -11,3 +11,4 @@ crawl4ai
 tavily-python
 feedparser
 aiohttp
+streamlit

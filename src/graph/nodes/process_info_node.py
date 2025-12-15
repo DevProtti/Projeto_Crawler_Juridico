@@ -10,7 +10,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 # Importações internas
 from src.utils.logger import setup_logger
-from src.utils.prompts import PROMPT_ANALYST
+from src.core.prompts import PROMPT_ANALYST
 from src.core.clustering import cluster_text_documents
 from src.utils.decorators import measure_execution_time
 from src.graph.state import State, ThemeCluster, ThemeSynthesisOutput
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 llm_fallback = ChatOpenAI(model="gpt-4o", temperature=0)
-MAX_CONCURRENT_LLM_CALLS = 10
+MAX_CONCURRENT_LLM_CALLS = 15
 
 
 async def _process_single_cluster(cluster_data: Dict[str, Any], semaphore: asyncio.Semaphore) -> Optional[ThemeCluster]:
@@ -63,7 +63,6 @@ async def _process_single_cluster(cluster_data: Dict[str, Any], semaphore: async
             logger.warning(f"Falha no modelo primário para cluster {cluster_id}: {e}. Tentando Fallback...")
 
             try:
-                # TENTATIVA 2: Fallback
                 result = await fallback_chain.ainvoke({
                     "num_docs": len(rep_docs),
                     "full_context": full_context
@@ -80,7 +79,8 @@ async def _process_single_cluster(cluster_data: Dict[str, Any], semaphore: async
             synthesized_summary=result.summary,
             representative_docs=rep_docs,
             reasoning=result.reasoning,
-            score=None # Será preenchido no próximo nó
+            score=None, # Será preenchido no próximo nó
+            suggested_product=None
         )
 
 

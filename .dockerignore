@@ -1,0 +1,28 @@
+# Git
+.git
+.gitignore
+
+# Python Cache & Ambientes Virtuais
+__pycache__
+*.pyc
+.venv
+venv
+env
+
+# Logs e Dados Locais
+logs/
+data/
+# output/
+*.log
+*.sqlite
+
+# IDEs
+.vscode
+.idea
+
+# Arquivos Docker (não precisa copiar o próprio Dockerfile para dentro)
+Dockerfile
+docker-compose.yml
+
+#notebooks
+notebooks/

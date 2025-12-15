@@ -143,6 +143,25 @@ class PredictusKB:
             logger.error(f"Erro na busca vetorial direta: {e}")
             return "Erro Vetorial", 0.0
 
+    def get_all_product_names(self) -> str:
+        """
+        Retorna uma string formatada com todos os produtos disponíveis no banco.
+        Ex: "- Jurimetria Predictus, Predictus Plataforma..."
+        """
+        try:
+            res = self.client.table("documents").select("metadata").execute()
+            
+            names = set()
+            for row in res.data:
+                name = row.get("metadata", {}).get("name")
+                if name:
+                    names.add(name)
+            
+            return "\n- ".join(sorted(list(names)))
+            
+        except Exception as e:
+            logger.error(f"Erro ao listar produtos: {e}")
+            return ""
 
 if __name__ == "__main__":
     kb_engine = PredictusKB()

@@ -3,7 +3,7 @@ name = "projeto-crawler-juridico"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
     "aiohttp>=3.13.2",
     "crawl4ai>=0.7.7",
@@ -21,6 +21,7 @@ dependencies = [
     "pytest-asyncio>=1.3.0",
     "requests>=2.32.5",
     "scikit-learn>=1.7.2",
+    "streamlit>=1.52.1",
     "supabase>=2.25.1",
     "tavily-python>=0.7.14",
 ]

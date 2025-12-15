@@ -1,0 +1,28 @@
+services:
+  app:
+    image: crawler_predictus
+    container_name: crawler_predictus
+
+    # Mapeamento de Portas (Host : Container)
+    ports:
+      - "8501:8501"
+
+    # Persistência de Dados
+    # Mapeamos apenas o que o container PRODUZ (Saída e Logs)
+    volumes:
+      - ./output:/app/output
+      - ./logs:/app/logs
+
+    # Injeção de Segredos
+    # O Docker lê o arquivo local e passa como variáveis de ambiente para o Linux do container
+    env_file:
+      - .env
+
+    # Política de Reinício
+    restart: unless-stopped
+    # (Opcional) Healthcheck para garantir que o Streamlit subiu
+    #healthcheck:
+    #test: ["CMD", "curl", "--fail", "http://localhost:8501/_stcore/health"]
+    #interval: 30s
+    #timeout: 10s
+    #retries: 3

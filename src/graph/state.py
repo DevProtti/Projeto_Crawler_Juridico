@@ -84,6 +84,10 @@ class ThemeCluster(BaseModel):
         ...,
         description="Justificativa do por quê o tema foi aprovado ou rejeitado, levando em consideração os produtos da Predictus. Deve citar produtos específicos quando aprovado"
     )
+    suggested_product: Optional[str] = Field(
+        None, 
+        description="Nome do produto da Predictus que mais se conecta com este tema (identificado via Vetor)."
+    )
     
 
 class ContentBrief(BaseModel):
@@ -111,6 +115,10 @@ class ContentBrief(BaseModel):
     target_persona: str = Field(
         ..., 
         description="Para quem é esse texto? Ex: 'Diretores Jurídicos', 'Advogados Autônomos'."
+    )
+    predictus_product: str = Field(
+        ..., 
+        description="O produto da Predictus que será ofertado neste conteúdo. Deve ser um dos produtos listados no contexto."
     )
 
 

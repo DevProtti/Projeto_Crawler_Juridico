@@ -1,9 +1,8 @@
 import asyncio
 import aiohttp
 import logging 
+import random
 import feedparser
-import os
-from datetime import timedelta, date
 from typing import List, Dict, Optional
 from tavily import AsyncTavilyClient
 
@@ -73,7 +72,8 @@ async def fetch_tavily_search(queries: List[str] = None, max_results: int = 5) -
                     query=q,
                     topic="news",
                     max_results=max_results,
-                    search_depth="advanced"
+                    search_depth="advanced",
+                    
                 )
             )
 
@@ -116,16 +116,18 @@ async def get_all_initial_documents(queries: Optional[List[str]] = None) -> List
     logger.info(f"# ===== PROCESSO DE BUSCA INICIADO ===== #")
     
     if not queries:
-        queries = TAVILY_QUERIES[:10]
+        queries = random.sample(TAVILY_QUERIES, k=min(40, len(TAVILY_QUERIES)))
 
     results = await asyncio.gather(
         fetch_rss_feeds(),
-        fetch_tavily_search(queries, max_results=25)
+        fetch_tavily_search(queries, max_results=40)
     )
 
     rss_docs, tavily_docs = results
     
+    #all_docs = random.sample(rss_docs, k=min(60, len(rss_docs))) + tavily_docs
     all_docs = rss_docs + tavily_docs
+ 
     logger.info(F"# ===== TAVILY SEARCH: {len(tavily_docs)} DOCUMENTOS ===== #")
     logger.info(F"# ===== RSS SEARCH: {len(rss_docs)} DOCUMENTOS ===== #")
     logger.info(f"# ===== PROCESSO DE BUSCA FINALIZADO ===== #")
